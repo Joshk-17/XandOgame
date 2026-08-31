@@ -7,6 +7,20 @@ repositories {
     mavenCentral()
 }
 
+//Dependencies for testing
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.2'
+}
+
+//Added a way to see testing outputs
+test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
 application {
     mainClass = 'TicTacToe'
 }

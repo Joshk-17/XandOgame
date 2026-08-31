@@ -117,7 +117,9 @@ public class TicTacToe
 		}
 		return status;
 	}
-	private void init()
+	
+	//Changed to public to allow for testing
+	public void init()
 	{
 		movesPlayer="";
 		override=0;
@@ -233,7 +235,9 @@ public class TicTacToe
 		crossbank.put(cell, 0);
 		return cell;
 	}
-	private int playerMove()
+	
+	//Made public to allow for testing
+	public int playerMove()
 	{
 		System.out.print("What's your move?: ");
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
@@ -263,14 +267,19 @@ public class TicTacToe
 		System.out.println();
 		return cell;
 	}
-	private void playerMoved(int cell)
+	
+	
+	//Made public to allow for testing
+	public void playerMoved(int cell)
 	{
 		movesPlayer+=cell;
 		mark(cell,0);
 		fixWeights();
 		knotbank.put(cell, 0);
 	}
-	private int checkForWin()
+	
+	//Made public to allow for testing
+	public int checkForWin()
 	{
 		int crossflag=0,knotflag=0;
 		for(int i=0;i<wins.length;i++)
