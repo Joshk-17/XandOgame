@@ -10,3 +10,7 @@ repositories {
 application {
     mainClass = 'TicTacToe'
 }
+
+tasks.named('run') {
+    standardInput = System.in
+}
