@@ -45,4 +45,21 @@ public class testing {
 
         assertEquals(1, game.checkForWin());
     }
+
+    //Test if computer chooses a winning move when available
+    //With the given code the computer will choose 5 then 1 as
+    //they hold the highest weight. So it should then choose 9 to win the game
+    //
+    @Test
+    public void testComputerChoosesWinningMove() {
+
+        TicTacToe game = new TicTacToe();
+
+        game.init();
+
+        game.compMove();
+        game.compMove();
+
+        assertEquals(9, game.compMove());
+    }
 }
