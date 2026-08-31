@@ -69,7 +69,7 @@ public class TicTacToe
 				System.out.println(e.getMessage());
 			}
 			
-		}while(choice!='n'||choice=='N');
+		}while(choice!='n'&& choice !='N');
 		
 		System.out.println("Game over.");
 	}
