@@ -198,7 +198,9 @@ public class TicTacToe
 			}
 		}
 	}
-	private int compMove()
+	
+	//Made public to allow for testing
+	public int compMove()
 	{
 		int cell=move();
 		System.out.println("Computer plays: "+cell);
@@ -219,16 +221,16 @@ public class TicTacToe
 		//This section ensures the computer never loses
 		//Remove it for a fair match
 		//Dirty kluge
-		if(movesPlayer.equals("76")||movesPlayer.equals("67"))
-			cell=9;
-		else if(movesPlayer.equals("92")||movesPlayer.equals("29"))
-			cell=3;
-		else if (movesPlayer.equals("18")||movesPlayer.equals("81"))
-			cell=7;
-		else if(movesPlayer.equals("73")||movesPlayer.equals("37"))
-			cell=4*((int)(Math.random()*2)+1);
-		else if(movesPlayer.equals("19")||movesPlayer.equals("91"))
-			cell=4+2*(int)(Math.pow(-1, (int)(Math.random()*2)));
+		// if(movesPlayer.equals("76")||movesPlayer.equals("67"))
+		// 	cell=9;
+		// else if(movesPlayer.equals("92")||movesPlayer.equals("29"))
+		// 	cell=3;
+		// else if (movesPlayer.equals("18")||movesPlayer.equals("81"))
+		// 	cell=7;
+		// else if(movesPlayer.equals("73")||movesPlayer.equals("37"))
+		// 	cell=4*((int)(Math.random()*2)+1);
+		// else if(movesPlayer.equals("19")||movesPlayer.equals("91"))
+		// 	cell=4+2*(int)(Math.pow(-1, (int)(Math.random()*2)));
 		
 		mark(cell,1);
 		fixWeights();
