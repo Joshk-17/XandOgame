@@ -18,21 +18,29 @@ public class WebApp {
 
                         <table border="1">
                             <tr>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
+                                <td><button onclick="makeMove(7)">7</button></td>
+                                <td><button onclick="makeMove(8)">8</button></td>
+                                <td><button onclick="makeMove(9)">9</button></td>
                             </tr>
                             <tr>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
+                                <td><button onclick="makeMove(4)">4</button></td>
+                                <td><button onclick="makeMove(5)">5</button></td>
+                                <td><button onclick="makeMove(6)">6</button></td>
                             </tr>
                             <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
+                                <td><button onclick="makeMove(1)">1</button></td>
+                                <td><button onclick="makeMove(2)">2</button></td>
+                                <td><button onclick="makeMove(3)">3</button></td>
                             </tr>
                         </table>
+
+                        <script>
+                            function makeMove(cell) {
+                            alert("You clicked square " + cell);
+                            }
+                        </script>
+
+
 
                     </body>
                     </html> 
