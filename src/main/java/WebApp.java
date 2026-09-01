@@ -2,7 +2,12 @@ import io.javalin.Javalin;
 
 public class WebApp {
 
+    //Create game for web 
+    private static TicTacToe game = new TicTacToe();
+
     public static void main(String[] args) {
+
+        game.init();
 
         Javalin app = Javalin.create(config -> {
 
@@ -18,19 +23,19 @@ public class WebApp {
 
                         <table border="1">
                             <tr>
-                                <td><button onclick="makeMove(7)">7</button></td>
-                                <td><button onclick="makeMove(8)">8</button></td>
-                                <td><button onclick="makeMove(9)">9</button></td>
+                                <td><button id="cell7" onclick="makeMove(7)">7</button></td>
+                                <td><button id="cell8" onclick="makeMove(8)">8</button></td>
+                                <td><button id="cell9" onclick="makeMove(9)">9</button></td>
                             </tr>
                             <tr>
-                                <td><button onclick="makeMove(4)">4</button></td>
-                                <td><button onclick="makeMove(5)">5</button></td>
-                                <td><button onclick="makeMove(6)">6</button></td>
+                                <td><button id="cell4" onclick="makeMove(4)">4</button></td>
+                                <td><button id="cell5" onclick="makeMove(5)">5</button></td>
+                                <td><button id="cell6" onclick="makeMove(6)">6</button></td>
                             </tr>
                             <tr>
-                                <td><button onclick="makeMove(1)">1</button></td>
-                                <td><button onclick="makeMove(2)">2</button></td>
-                                <td><button onclick="makeMove(3)">3</button></td>
+                                <td><button id="cell1" onclick="makeMove(1)">1</button></td>
+                                <td><button id="cell2" onclick="makeMove(2)">2</button></td>
+                                <td><button id="cell3" onclick="makeMove(3)">3</button></td>
                             </tr>
                         </table>
 
@@ -39,11 +44,12 @@ public class WebApp {
                                 fetch("/move/" + cell)
                                     .then(response => response.text())
                                     .then(data => {
-                                        console.log(data);
+                                        document.getElementById("cell" + cell).innerText = data;
+                                        document.getElementById("cell" + cell).disabled = true;
                                     });
                             }
                         </script>
-                        
+
                     </body>
                     </html> 
                     """;
@@ -55,9 +61,11 @@ public class WebApp {
 
                 int cell = Integer.parseInt(ctx.pathParam("cell"));
 
+                game.playerMoved(cell);
+
                 System.out.println("Player clicked square: " + cell);
 
-                ctx.result("Move received");
+                ctx.result("O");
             });
 
         }).start(7070);
