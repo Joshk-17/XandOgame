@@ -36,16 +36,28 @@ public class WebApp {
 
                         <script>
                             function makeMove(cell) {
-                            alert("You clicked square " + cell);
+                                fetch("/move/" + cell)
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        console.log(data);
+                                    });
                             }
                         </script>
-
-
-
+                        
                     </body>
                     </html> 
                     """;
+
                 ctx.html(html);
+            });
+
+            config.routes.get("/move/{cell}", ctx -> {
+
+                int cell = Integer.parseInt(ctx.pathParam("cell"));
+
+                System.out.println("Player clicked square: " + cell);
+
+                ctx.result("Move received");
             });
 
         }).start(7070);
