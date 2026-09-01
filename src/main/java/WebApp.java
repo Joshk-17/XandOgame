@@ -41,11 +41,25 @@ public class WebApp {
 
                         <script>
                             function makeMove(cell) {
+
+                                //Send player move to backend
                                 fetch("/move/" + cell)
                                     .then(response => response.text())
                                     .then(data => {
-                                        document.getElementById("cell" + cell).innerText = data;
-                                        document.getElementById("cell" + cell).disabled = true;
+
+                                        //Split the player and computer moves
+                                        let moves = data.split(",");
+
+                                        let playerCell = moves[0];
+                                        let computerCell = moves[1];
+
+                                        //Display player move
+                                        document.getElementById("cell" + playerCell).innerText = "O";
+                                        document.getElementById("cell" + playerCell).disabled = true;
+
+                                        //Display computer move
+                                        document.getElementById("cell" + computerCell).innerText = "X";
+                                        document.getElementById("cell" + computerCell).disabled = true;
                                     });
                             }
                         </script>
@@ -65,7 +79,9 @@ public class WebApp {
 
                 System.out.println("Player clicked square: " + cell);
 
-                ctx.result("O");
+                int computerCell = game.compMove();
+
+                ctx.result(cell + "," + computerCell);
             });
 
         }).start(7070);
