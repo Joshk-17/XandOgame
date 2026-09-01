@@ -41,6 +41,8 @@ public class WebApp {
 
                         <p id="result"></p>
 
+                        <button onclick="newGame()">New Game</button>
+
                         <script>
                             function makeMove(cell) {
 
@@ -71,7 +73,16 @@ public class WebApp {
                                             document.getElementById("result").innerText = result;
                                         }
                                     });
-                            }
+                                }
+
+                            //Start new game
+                            function newGame() {
+                                
+                                fetch("/newgame")
+                                    .then(() => {
+                                        location.reload();
+                                    });
+                                }
                         </script>
 
                     </body>
@@ -121,6 +132,14 @@ public class WebApp {
 
                 // If no one has won, continue the game
                 ctx.result(cell + "," + computerCell + ",Playing");
+            });
+
+            config.routes.get("/newgame", ctx -> {
+
+                //Reset the game
+                game.init();
+
+                ctx.result("New game started");
             });
 
         }).start(7070);
