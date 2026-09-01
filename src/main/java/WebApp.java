@@ -7,6 +7,7 @@ public class WebApp {
 
     public static void main(String[] args) {
 
+        Database.connect();
         game.init();
 
         Javalin app = Javalin.create(config -> {
