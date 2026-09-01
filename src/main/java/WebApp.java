@@ -39,6 +39,8 @@ public class WebApp {
                             </tr>
                         </table>
 
+                        <p id="result"></p>
+
                         <script>
                             function makeMove(cell) {
 
@@ -52,14 +54,22 @@ public class WebApp {
 
                                         let playerCell = moves[0];
                                         let computerCell = moves[1];
+                                        let result = moves[2];
 
                                         //Display player move
                                         document.getElementById("cell" + playerCell).innerText = "O";
                                         document.getElementById("cell" + playerCell).disabled = true;
 
                                         //Display computer move
-                                        document.getElementById("cell" + computerCell).innerText = "X";
-                                        document.getElementById("cell" + computerCell).disabled = true;
+                                        if (computerCell != -1) {
+                                            document.getElementById("cell" + computerCell).innerText = "X";
+                                            document.getElementById("cell" + computerCell).disabled = true;
+                                        }
+
+                                        //Display the result
+                                        if (result !== "Playing"){
+                                            document.getElementById("result").innerText = result;
+                                        }
                                     });
                             }
                         </script>
@@ -79,9 +89,38 @@ public class WebApp {
 
                 System.out.println("Player clicked square: " + cell);
 
+                // Check if the player has won
+                int result = game.checkForWin();
+
+                if (result == 0) {
+                    ctx.result(cell + ",-1,Player wins");
+                    return;
+                }
+
+                //Check if the game is a draw
+                if (result == 2) {
+                    ctx.result(cell + ",-1,Draw");
+                    return;
+                }
+
                 int computerCell = game.compMove();
 
-                ctx.result(cell + "," + computerCell);
+                // Check if the computer has won
+                result = game.checkForWin();
+
+                if (result == 1) {
+                    ctx.result(cell + "," + computerCell + ",Computer wins");
+                    return;
+                }
+
+                //Check if the game is a draw
+                if (result == 2) {
+                    ctx.result(cell + "," + computerCell + ",Draw");
+                    return;
+                }
+
+                // If no one has won, continue the game
+                ctx.result(cell + "," + computerCell + ",Playing");
             });
 
         }).start(7070);
