@@ -9,10 +9,11 @@ COPY . .
 
 # Build the application
 RUN chmod +x gradlew
+RUN chmod +x entrypoint.sh
 RUN ./gradlew build --no-daemon
 
 # Web app uses port 7070
 EXPOSE 7070
 
 # Start the web application
-CMD ["./gradlew", "run", "--no-daemon"]
+ENTRYPOINT ["./entrypoint.sh"]

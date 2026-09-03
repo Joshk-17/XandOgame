@@ -22,7 +22,11 @@ public class WebApp {
 
                 //Check if user is logged in
                 String username = ctx.sessionAttribute("username");
-                System.out.println("Logged in user: " + username);
+                if (username == null) {
+                    ctx.redirect("/login");
+                    return;
+                }
+                //System.out.println("Logged in user: " + username);
                 String html = """
                 <html>
                     <head>
