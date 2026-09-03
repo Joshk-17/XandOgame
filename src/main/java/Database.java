@@ -1,6 +1,10 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import org.mindrot.jbcrypt.BCrypt;
+
 
 public class Database {
 
@@ -24,4 +28,33 @@ public class Database {
             return null;
         }
     }
+
+    public static boolean registerUser(String username, String password) {
+
+    // Hash the password before storing it
+    String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+    String sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setString(1, username);
+        statement.setString(2, hashedPassword);
+
+        statement.executeUpdate();
+
+        connection.close();
+
+        System.out.println("User registered");
+
+        return true;
+
+    } catch (SQLException e) {
+        System.out.println("Could not register user");
+        return false;
+    }
+}
 }

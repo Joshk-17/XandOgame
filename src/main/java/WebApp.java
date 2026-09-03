@@ -143,6 +143,52 @@ public class WebApp {
                 ctx.result("New game started");
             });
 
+            //Display registration page
+            config.routes.get("/register", ctx -> {
+
+                String html = """
+                    <html>
+                        <head>
+                            <title>Register</title>
+                        </head>
+                        <body>
+                            <h1>Create Account</h1>
+
+                            <form action="/register" method="post">
+                                <label>Username:</label>
+                                <input type="text" name="username" required>
+
+                                <br><br>
+
+                                <label>Password:</label>
+                                <input type="password" name="password" required>
+
+                                <br><br>
+
+                                <button type="submit">Register</button>
+                            </form>
+                        </body>
+                    </html>
+                    """;
+
+                ctx.html(html);
+            });
+
+            //Register a new user
+            config.routes.post("/register", ctx -> {
+
+                String username = ctx.formParam("username");
+                String password = ctx.formParam("password");
+
+                boolean registered = Database.registerUser(username, password);
+
+                if (registered) {
+                    ctx.redirect("/");
+                } else {
+                    ctx.html("<h1>Registration failed</h1><a href='/register'>Try again</a>");
+                }
+            });
+
         }).start(7070);
     }
 }
