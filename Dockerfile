@@ -8,6 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Build the application
+RUN chmod +x gradlew
 RUN ./gradlew build --no-daemon
 
 # Web app uses port 7070
