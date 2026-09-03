@@ -10,9 +10,20 @@ public class Database {
 
     public static Connection connect() {
 
-        String url = "jdbc:postgresql://localhost:5433/xsandos";
-        String user = "postgres";
-        String password = "password";
+        String url = System.getenv().getOrDefault(
+            "DB_URL",
+            "jdbc:postgresql://localhost:5433/xsandos"
+        );
+
+        String user = System.getenv().getOrDefault(
+            "DB_USER",
+            "postgres"
+        );
+
+        String password = System.getenv().getOrDefault(
+            "DB_PASSWORD",
+            "password"
+        );
 
         try {
             Connection connection = DriverManager.getConnection(url, user, password);

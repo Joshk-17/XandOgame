@@ -1,5 +1,16 @@
 services:
 
+  app:
+      build: .
+      ports:
+        - "7070:7070"
+      environment:
+        DB_URL: jdbc:postgresql://database:5432/xsandos
+        DB_USER: postgres
+        DB_PASSWORD: password
+      depends_on:
+        - database
+
   database:
     build: ./database
     environment:
