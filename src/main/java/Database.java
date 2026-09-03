@@ -88,5 +88,61 @@ public class Database {
     }
 }
 
+public static int getUserId(String username) {
+
+    String sql = "SELECT user_id FROM users WHERE username = ?";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, username);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+
+            int userId = results.getInt("user_id");
+
+            connection.close();
+
+            return userId;
+        }
+
+        connection.close();
+        return -1;
+
+    } catch (SQLException e) {
+        System.out.println("Could not find user");
+        return -1;
+    }
+}
+
+public static boolean saveGame(int userId, String result, int duration) {
+
+    String sql = "INSERT INTO games (user_id, result, duration) VALUES (?, ?, ?)";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setInt(1, userId);
+        statement.setString(2, result);
+        statement.setInt(3, duration);
+
+        statement.executeUpdate();
+
+        connection.close();
+
+        System.out.println("Game saved");
+
+        return true;
+
+    } catch (SQLException e) {
+        System.out.println("Could not save game");
+        return false;
+    }
+}
 
 }

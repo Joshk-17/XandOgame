@@ -5,14 +5,24 @@ public class WebApp {
     //Create game for web 
     private static TicTacToe game = new TicTacToe();
 
+    //Start time variable
+    private static long gameStartTime;
+
     public static void main(String[] args) {
 
         Database.connect();
         game.init();
 
+        //Store the start time of the game
+        gameStartTime = System.currentTimeMillis();
+
         Javalin app = Javalin.create(config -> {
 
             config.routes.get("/", ctx -> {
+
+                //Check if user is logged in
+                String username = ctx.sessionAttribute("username");
+                System.out.println("Logged in user: " + username);
                 String html = """
                 <html>
                     <head>
@@ -96,6 +106,7 @@ public class WebApp {
             config.routes.get("/move/{cell}", ctx -> {
 
                 int cell = Integer.parseInt(ctx.pathParam("cell"));
+                String username = ctx.sessionAttribute("username");
 
                 game.playerMoved(cell);
 
@@ -105,12 +116,16 @@ public class WebApp {
                 int result = game.checkForWin();
 
                 if (result == 0) {
+
+                    saveFinishedGame(username, "WIN");
                     ctx.result(cell + ",-1,Player wins");
                     return;
                 }
 
                 //Check if the game is a draw
                 if (result == 2) {
+
+                    saveFinishedGame(username, "DRAW");
                     ctx.result(cell + ",-1,Draw");
                     return;
                 }
@@ -121,12 +136,16 @@ public class WebApp {
                 result = game.checkForWin();
 
                 if (result == 1) {
+
+                    saveFinishedGame(username, "LOSS");
                     ctx.result(cell + "," + computerCell + ",Computer wins");
                     return;
                 }
 
                 //Check if the game is a draw
                 if (result == 2) {
+
+                    saveFinishedGame(username, "DRAW");
                     ctx.result(cell + "," + computerCell + ",Draw");
                     return;
                 }
@@ -139,6 +158,8 @@ public class WebApp {
 
                 //Reset the game
                 game.init();
+                //Start timing the new game
+                gameStartTime = System.currentTimeMillis();
 
                 ctx.result("New game started");
             });
@@ -237,6 +258,8 @@ public class WebApp {
                 boolean loggedIn = Database.loginUser(username, password);
 
                 if (loggedIn) {
+
+                    ctx.sessionAttribute("username", username);
                     ctx.redirect("/");
                 } else {
                     ctx.html("<h1>Incorrect username or password</h1><a href='/login'>Try again</a>");
@@ -244,5 +267,15 @@ public class WebApp {
             });
 
         }).start(7070);
+    }
+
+    private static void saveFinishedGame(String username, String result) {
+
+    int userId = Database.getUserId(username);
+    long endTime = System.currentTimeMillis();
+    int duration = (int) ((endTime - gameStartTime) / 1000);
+
+    Database.saveGame(userId, result, duration);
+    
     }
 }
