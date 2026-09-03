@@ -208,6 +208,7 @@ public class WebApp {
                 boolean registered = Database.registerUser(username, password);
 
                 if (registered) {
+                    ctx.sessionAttribute("username", username);
                     ctx.redirect("/");
                 } else {
                     ctx.html("<h1>Registration failed</h1><a href='/register'>Try again</a>");

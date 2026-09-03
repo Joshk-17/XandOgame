@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class Database {
 
+    //Connects app to database
     public static Connection connect() {
 
         String url = System.getenv().getOrDefault(
@@ -40,8 +41,8 @@ public class Database {
         }
     }
 
+    //Create new user
     public static boolean registerUser(String username, String password) {
-
     // Hash the password before storing it
     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
@@ -50,11 +51,11 @@ public class Database {
     try {
         Connection connection = connect();
 
+       //Insert username and password
         PreparedStatement statement = connection.prepareStatement(sql);
 
         statement.setString(1, username);
         statement.setString(2, hashedPassword);
-
         statement.executeUpdate();
 
         connection.close();
@@ -69,6 +70,7 @@ public class Database {
         }
     }
 
+    //Check user credentials for login
     public static boolean loginUser(String username, String password) {
 
     String sql = "SELECT password_hash FROM users WHERE username = ?";
@@ -83,14 +85,15 @@ public class Database {
 
         if (results.next()) {
 
+            //Gets hashed password and stores it
             String storedHash = results.getString("password_hash");
-
             connection.close();
-
             return BCrypt.checkpw(password, storedHash);
         }
 
         connection.close();
+
+        //Compares entered password with stored password
         return false;
 
     } catch (SQLException e) {
@@ -99,6 +102,7 @@ public class Database {
     }
 }
 
+//Gets user id from usernam
 public static int getUserId(String username) {
 
     String sql = "SELECT user_id FROM users WHERE username = ?";
@@ -114,9 +118,7 @@ public static int getUserId(String username) {
         if (results.next()) {
 
             int userId = results.getInt("user_id");
-
             connection.close();
-
             return userId;
         }
 
@@ -129,6 +131,8 @@ public static int getUserId(String username) {
     }
 }
 
+
+//Save a completed game to table
 public static boolean saveGame(int userId, String result, int duration) {
 
     String sql = "INSERT INTO games (user_id, result, duration) VALUES (?, ?, ?)";
@@ -141,7 +145,6 @@ public static boolean saveGame(int userId, String result, int duration) {
         statement.setInt(1, userId);
         statement.setString(2, result);
         statement.setInt(3, duration);
-
         statement.executeUpdate();
 
         connection.close();
@@ -156,6 +159,7 @@ public static boolean saveGame(int userId, String result, int duration) {
     }
 }
 
+//Get average duration of all games played by user
 public static double getAverageDuration(int userId) {
 
     String sql = "SELECT AVG(duration) FROM games WHERE user_id = ?";
@@ -183,6 +187,7 @@ public static double getAverageDuration(int userId) {
     }
 }
 
+//Find shortest game won by user
 public static int getShortestWin(int userId) {
 
     String sql = "SELECT MIN(duration) FROM games WHERE user_id = ? AND result = 'WIN'";
@@ -210,6 +215,7 @@ public static int getShortestWin(int userId) {
     }
 }
 
+//Find longest game won by user
 public static int getLongestWin(int userId) {
 
     String sql = "SELECT MAX(duration) FROM games WHERE user_id = ? AND result = 'WIN'";
@@ -237,6 +243,7 @@ public static int getLongestWin(int userId) {
     }
 }
 
+//Find shortest game lost by user
 public static int getShortestLoss(int userId) {
 
     String sql = "SELECT MIN(duration) FROM games WHERE user_id = ? AND result = 'LOSS'";
@@ -264,6 +271,7 @@ public static int getShortestLoss(int userId) {
     }
 }
 
+//Find longest game lost by user
 public static int getLongestLoss(int userId) {
 
     String sql = "SELECT MAX(duration) FROM games WHERE user_id = ? AND result = 'LOSS'";
@@ -291,6 +299,7 @@ public static int getLongestLoss(int userId) {
     }
 }
 
+//Count how many games user has played
 public static int getGamesPlayed(int userId) {
 
     String sql = "SELECT COUNT(*) FROM games WHERE user_id = ?";
