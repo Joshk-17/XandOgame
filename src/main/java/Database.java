@@ -55,6 +55,38 @@ public class Database {
     } catch (SQLException e) {
         System.out.println("Could not register user");
         return false;
+        }
+    }
+
+    public static boolean loginUser(String username, String password) {
+
+    String sql = "SELECT password_hash FROM users WHERE username = ?";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, username);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+
+            String storedHash = results.getString("password_hash");
+
+            connection.close();
+
+            return BCrypt.checkpw(password, storedHash);
+        }
+
+        connection.close();
+        return false;
+
+    } catch (SQLException e) {
+        System.out.println("Login failed");
+        return false;
     }
 }
+
+
 }

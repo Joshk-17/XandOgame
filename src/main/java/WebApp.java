@@ -167,6 +167,8 @@ public class WebApp {
 
                                 <button type="submit">Register</button>
                             </form>
+
+                            <p>Already have an account? <a href="/login">Login</a></p>
                         </body>
                     </html>
                     """;
@@ -186,6 +188,58 @@ public class WebApp {
                     ctx.redirect("/");
                 } else {
                     ctx.html("<h1>Registration failed</h1><a href='/register'>Try again</a>");
+                }
+            });
+
+            //Display login page
+            config.routes.get("/login", ctx -> {
+
+                String html = """
+                    <html>
+                        <head>
+                            <title>Login</title>
+                        </head>
+
+                        <body>
+                            <h1>Login</h1>
+
+                            <form action="/login" method="post">
+
+                                <label>Username:</label>
+                                <input type="text" name="username" required>
+
+                                <br><br>
+
+                                <label>Password:</label>
+                                <input type="password" name="password" required>
+
+                                <br><br>
+
+                                <button type="submit">Login</button>
+
+                            </form>
+
+                            <p>Don't have an account? <a href="/register">Register</a></p>
+
+                        </body>
+                    </html>
+                    """;
+
+                ctx.html(html);
+            });
+
+            //Check login details
+            config.routes.post("/login", ctx -> {
+
+                String username = ctx.formParam("username");
+                String password = ctx.formParam("password");
+
+                boolean loggedIn = Database.loginUser(username, password);
+
+                if (loggedIn) {
+                    ctx.redirect("/");
+                } else {
+                    ctx.html("<h1>Incorrect username or password</h1><a href='/login'>Try again</a>");
                 }
             });
 
