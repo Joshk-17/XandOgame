@@ -53,6 +53,8 @@ public class WebApp {
                         <p id="result"></p>
 
                         <button onclick="newGame()">New Game</button>
+                        <br><br>
+                        <a href="/stats">View Statistics</a>
 
                         <script>
                             function makeMove(cell) {
@@ -266,6 +268,67 @@ public class WebApp {
                 }
             });
 
+            //Display statistics page
+            config.routes.get("/stats", ctx -> {
+
+                String username = ctx.sessionAttribute("username");
+
+                if (username == null) {
+                    ctx.redirect("/login");
+                    return;
+                }
+
+                int userId = Database.getUserId(username);
+
+                int gamesPlayed = Database.getGamesPlayed(userId);
+                double averageDuration = Database.getAverageDuration(userId);
+
+                int shortestWin = Database.getShortestWin(userId);
+                int longestWin = Database.getLongestWin(userId);
+
+                int shortestLoss = Database.getShortestLoss(userId);
+                int longestLoss = Database.getLongestLoss(userId);
+
+                String html = """
+                    <html>
+                        <head>
+                            <title>Statistics</title>
+                        </head>
+                        <body>
+
+                            <h1>Game Statistics</h1>
+
+                            <p>User: %s</p>
+
+                            <p>Games played: %d</p>
+
+                            <p>Average duration: %.2f seconds</p>
+
+                            <p>Shortest win: %d seconds</p>
+
+                            <p>Longest win: %d seconds</p>
+
+                            <p>Shortest loss: %d seconds</p>
+
+                            <p>Longest loss: %d seconds</p>
+
+                            <a href="/">Back to game</a>
+
+                        </body>
+                    </html>
+                    """.formatted(
+                        username,
+                        gamesPlayed,
+                        averageDuration,
+                        shortestWin,
+                        longestWin,
+                        shortestLoss,
+                        longestLoss
+                    );
+
+                ctx.html(html);
+            });
+
         }).start(7070);
     }
 
@@ -278,4 +341,6 @@ public class WebApp {
     Database.saveGame(userId, result, duration);
     
     }
+
+    
 }

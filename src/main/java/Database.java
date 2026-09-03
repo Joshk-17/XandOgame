@@ -145,4 +145,174 @@ public static boolean saveGame(int userId, String result, int duration) {
     }
 }
 
+public static double getAverageDuration(int userId) {
+
+    String sql = "SELECT AVG(duration) FROM games WHERE user_id = ?";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, userId);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+            double average = results.getDouble(1);
+            connection.close();
+            return average;
+        }
+
+        connection.close();
+        return 0;
+
+    } catch (SQLException e) {
+        System.out.println("Could not get average duration");
+        return 0;
+    }
+}
+
+public static int getShortestWin(int userId) {
+
+    String sql = "SELECT MIN(duration) FROM games WHERE user_id = ? AND result = 'WIN'";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, userId);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+            int duration = results.getInt(1);
+            connection.close();
+            return duration;
+        }
+
+        connection.close();
+        return 0;
+
+    } catch (SQLException e) {
+        System.out.println("Could not get shortest win");
+        return 0;
+    }
+}
+
+public static int getLongestWin(int userId) {
+
+    String sql = "SELECT MAX(duration) FROM games WHERE user_id = ? AND result = 'WIN'";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, userId);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+            int duration = results.getInt(1);
+            connection.close();
+            return duration;
+        }
+
+        connection.close();
+        return 0;
+
+    } catch (SQLException e) {
+        System.out.println("Could not get longest win");
+        return 0;
+    }
+}
+
+public static int getShortestLoss(int userId) {
+
+    String sql = "SELECT MIN(duration) FROM games WHERE user_id = ? AND result = 'LOSS'";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, userId);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+            int duration = results.getInt(1);
+            connection.close();
+            return duration;
+        }
+
+        connection.close();
+        return 0;
+
+    } catch (SQLException e) {
+        System.out.println("Could not get shortest loss");
+        return 0;
+    }
+}
+
+public static int getLongestLoss(int userId) {
+
+    String sql = "SELECT MAX(duration) FROM games WHERE user_id = ? AND result = 'LOSS'";
+
+    try {
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, userId);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+            int duration = results.getInt(1);
+            connection.close();
+            return duration;
+        }
+
+        connection.close();
+        return 0;
+
+    } catch (SQLException e) {
+        System.out.println("Could not get longest loss");
+        return 0;
+    }
+}
+
+public static int getGamesPlayed(int userId) {
+
+    String sql = "SELECT COUNT(*) FROM games WHERE user_id = ?";
+
+    try {
+
+        Connection connection = connect();
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setInt(1, userId);
+
+        var results = statement.executeQuery();
+
+        if (results.next()) {
+
+            int gamesPlayed = results.getInt(1);
+
+            connection.close();
+
+            return gamesPlayed;
+        }
+
+        connection.close();
+
+        return 0;
+
+    } catch (SQLException e) {
+
+        System.out.println("Could not get games played");
+
+        return 0;
+    }
+}
+
 }
